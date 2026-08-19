@@ -50,11 +50,6 @@ public class LoginServlet extends HttpServlet {
             Usuario usuario = authService.autenticar(correo, password);
             SesionUsuario.guardar(request, usuario);
 
-            // sweet alert
-            request.getSession().setAttribute("swal_titulo", "¡Bienvenido!");
-            request.getSession().setAttribute("swal_texto", "Hola de nuevo, " + usuario.getNombre());
-            request.getSession().setAttribute("swal_icono", "success");
-
             if (usuario.esAdmin()) {
                 response.sendRedirect(request.getContextPath() + "/admin");
             } else {
@@ -62,20 +57,14 @@ public class LoginServlet extends HttpServlet {
             }
 
         } catch (AutenticacionFallidaException e) {
-            String swalError = "<script>"
-                    + "Swal.fire({ title: 'Acceso Denegado', text: 'Las credenciales ingresadas son incorrectas.', icon: 'error', confirmButtonText: 'Aceptar', confirmButtonColor: '#dc3545' });"
-                    + "</script>";
-            request.setAttribute("alerta", swalError);
+
+            request.setAttribute("error", "Credenciales Incorrectas");
 
             request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
-
-            String swalInesperado = "<script>"
-                    + "Swal.fire({ title: 'Error Inesperado', text: 'Error: " + e.getMessage() + "', icon: 'error', confirmButtonText: 'Aceptar', confirmButtonColor: '#dc3545' });"
-                    + "</script>";
-            request.setAttribute("alerta", swalInesperado);
+            request.setAttribute("error", "Error: " + e.getMessage());
 
             request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
         }
