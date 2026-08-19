@@ -13,6 +13,7 @@
               content="width=device-width, initial-scale=1.0">
 
         <title>Mis Tickets - Mesa de Ayuda CIMM</title>
+        <script src="https://jsdelivr.net"></script>
 
         <link rel="stylesheet"
               href="${pageContext.request.contextPath}/css/estilo.css">
@@ -566,18 +567,6 @@
 
                 </div>
 
-
-                <a
-                    href="${pageContext.request.contextPath}/crear-ticket"
-                    class="btn-nuevo">
-
-                    <span>
-                        ＋
-                    </span>
-
-                    Nuevo ticket
-
-                </a>
 
             </div>
 

@@ -23,45 +23,60 @@ import java.io.IOException;
  */
 @WebServlet(name = "loginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
-    
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         if (SesionUsuario.estaAutenticado(request)) {
             response.sendRedirect(request.getContextPath() + "/tickets");
             return;
         }
-        
+
         request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
     }
-    
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String correo = request.getParameter("correo");
         String password = request.getParameter("password");
-        
-        AuthService authService = 
-            (AuthService) getServletContext().getAttribute(AppContextListener.AUTH_SERVICE);
-        
+
+        AuthService authService
+                = (AuthService) getServletContext().getAttribute(AppContextListener.AUTH_SERVICE);
+
         try {
             Usuario usuario = authService.autenticar(correo, password);
             SesionUsuario.guardar(request, usuario);
-            
+
+            // sweet alert
+            request.getSession().setAttribute("swal_titulo", "¡Bienvenido!");
+            request.getSession().setAttribute("swal_texto", "Hola de nuevo, " + usuario.getNombre());
+            request.getSession().setAttribute("swal_icono", "success");
+
             if (usuario.esAdmin()) {
                 response.sendRedirect(request.getContextPath() + "/admin");
             } else {
                 response.sendRedirect(request.getContextPath() + "/tickets");
             }
-            
+
         } catch (AutenticacionFallidaException e) {
-            request.setAttribute("error", "Credenciales incorrectas");
+            String swalError = "<script>"
+                    + "Swal.fire({ title: 'Acceso Denegado', text: 'Las credenciales ingresadas son incorrectas.', icon: 'error', confirmButtonText: 'Aceptar', confirmButtonColor: '#dc3545' });"
+                    + "</script>";
+            request.setAttribute("alerta", swalError);
+
             request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+
         } catch (Exception e) {
-            e.printStackTrace();  // ← Esto imprimirá el error en el log
-            request.setAttribute("error", "Error: " + e.getMessage());
+            e.printStackTrace();
+
+            String swalInesperado = "<script>"
+                    + "Swal.fire({ title: 'Error Inesperado', text: 'Error: " + e.getMessage() + "', icon: 'error', confirmButtonText: 'Aceptar', confirmButtonColor: '#dc3545' });"
+                    + "</script>";
+            request.setAttribute("alerta", swalInesperado);
+
             request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
         }
     }

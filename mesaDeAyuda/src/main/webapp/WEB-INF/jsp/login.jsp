@@ -15,6 +15,8 @@
 
         <link rel="stylesheet"
               href="${pageContext.request.contextPath}/css/estilo.css">
+        
+        <script src="https://cloudflare.com"></script>
 
         <link rel="preconnect"
               href="https://fonts.googleapis.com">
@@ -1281,6 +1283,27 @@
                     }
             );
 
+        </script>
+
+        <script>
+            // Esperamos a que la página cargue por completo
+            document.addEventListener("DOMContentLoaded", function () {
+                // Capturamos los valores enviados desde los catch del Servlet
+                const titulo = "${swal_titulo}";
+                const texto = "${swal_texto}";
+                const icono = "${swal_icono}";
+
+                // Si el servlet envió datos, disparamos la alerta de SweetAlert2
+                if (titulo && titulo.trim() !== "") {
+                    Swal.fire({
+                        title: titulo,
+                        text: texto,
+                        icon: icono,
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#dc3545' // Color rojo para el botón
+                    });
+                }
+            });
         </script>
 
 

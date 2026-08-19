@@ -11,6 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>Dashboard - Admin</title>
+        <script src="https://jsdelivr.net"></script>
 
         <link rel="stylesheet"
               href="${pageContext.request.contextPath}/css/estilo.css">
