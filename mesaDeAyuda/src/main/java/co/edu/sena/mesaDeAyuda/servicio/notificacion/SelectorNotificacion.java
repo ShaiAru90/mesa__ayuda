@@ -22,8 +22,13 @@ public class SelectorNotificacion {
         for (NotificacionStrategy estrategia : estrategias) {
             this.estrategias.put(estrategia.getClass().getSimpleName(), estrategia);
         }
-        // Estrategia por defecto (Correo)
-        this.estrategias.put("DEFAULT", new NotificacionCorreo());
+        
+        NotificacionStrategy app = this.estrategias.get("NotificacionApp");
+        if (app != null) {
+            this.estrategias.put("DEFAULT", app);
+        } else {            
+            this.estrategias.put("DEFAULT", new NotificacionCorreo());
+        }
     }
     
     public Optional<NotificacionStrategy> resolver(String clave) {

@@ -3,6 +3,21 @@
 
 <header class="barra">
 
+    <%-- Obtener contador de notificaciones --%>
+    <%
+        co.edu.sena.mesaDeAyuda.modelo.Usuario usuarioActual
+                = co.edu.sena.mesaDeAyuda.web.SesionUsuario.obtener(request);
+        int notificacionesNoLeidas = 0;
+        if (usuarioActual != null) {
+            co.edu.sena.mesaDeAyuda.servicio.notificacion.NotificacionApp app
+                    = (co.edu.sena.mesaDeAyuda.servicio.notificacion.NotificacionApp) application.getAttribute(co.edu.sena.mesaDeAyuda.web.AppContextListener.NOTIFICACION_APP);
+            if (app != null) {
+                notificacionesNoLeidas = app.contarNoLeidas(usuarioActual);
+            }
+        }
+        request.setAttribute("notificacionesNoLeidas", notificacionesNoLeidas);
+    %>
+
     <div class="brand-container">
 
         <a href="${pageContext.request.contextPath}/tickets"
@@ -79,6 +94,19 @@
 
                 Mis Tickets
 
+            </a>
+
+            <a href="${pageContext.request.contextPath}/notificaciones" class="nav-link notificaciones-link">
+                <span class="nav-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                </span>
+                Notificaciones
+                <c:if test="${notificacionesNoLeidas > 0}">
+                    <span class="badge-notificacion">${notificacionesNoLeidas}</span>
+                </c:if>
             </a>
 
 

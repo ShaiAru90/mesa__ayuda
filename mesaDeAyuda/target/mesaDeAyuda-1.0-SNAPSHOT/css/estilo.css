@@ -13,6 +13,23 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+.notificaciones-link {
+    position: relative;
+}
+.badge-notificacion {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-weight: 800;
+    min-width: 18px;
+    text-align: center;
+}
+
 /* Header - ya definido en cada JSP con estilos inline */
 /* Aquí van estilos globales si se necesitan */
 

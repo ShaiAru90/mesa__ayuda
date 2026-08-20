@@ -16,7 +16,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import java.util.List;
 
-
 @WebListener
 public class AppContextListener implements ServletContextListener {
 
@@ -29,52 +28,53 @@ public class AppContextListener implements ServletContextListener {
     public static final String CATEGORIA_REPOSITORY = "categoriaRepository";
     public static final String USUARIO_REPOSITORY = "usuarioRepository";
     public static final String TICKET_REPOSITORY = "ticketRepository";
-    
+    public static final String NOTIFICACION_APP = "notificacionApp";
+
     @Override
     public void contextInitialized(ServletContextEvent evento) {
         ServletContext contexto = evento.getServletContext();
-        
-       
+
         UsuarioRepository usuarioRepository = new UsuarioRepositoryEnMemoria();
         TicketRepository ticketRepository = new TicketRepositoryEnMemoria();
         CategoriaRepository categoriaRepository = new CategoriaRepositoryEnMemoria();
-        
+        NotificacionApp notificacionApp = new NotificacionApp();
+
         SelectorAsignacion selectorAsignacion = new SelectorAsignacion(List.of(
-            new AsignacionPorTurno(),
-            new AsignacionPorCarga(),
-            new AsignacionPorCategoria()
+                new AsignacionPorTurno(),
+                new AsignacionPorCarga(),
+                new AsignacionPorCategoria()
         ));
-        
+
         SelectorPrioridad selectorPrioridad = new SelectorPrioridad(List.of(
-            new PrioridadPorCategoria(),
-            new PrioridadPorPalabras()
+                new PrioridadPorCategoria(),
+                new PrioridadPorPalabras()
         ));
-        
+
         SelectorNotificacion selectorNotificacion = new SelectorNotificacion(List.of(
-            new NotificacionCorreo(),
-            new NotificacionSMS(),
-            new NotificacionApp()
+                new NotificacionCorreo(),
+                new NotificacionSMS(),
+                notificacionApp
         ));
-        
+
         AsignacionService asignacionService = new AsignacionServiceImpl(
-            selectorAsignacion,
-            usuarioRepository
+                selectorAsignacion,
+                usuarioRepository
         );
-        
+
         TicketService ticketService = new TicketServiceImpl(
-            ticketRepository,
-            usuarioRepository,
-            selectorPrioridad,
-            selectorAsignacion,
-            selectorNotificacion,
-            asignacionService
+                ticketRepository,
+                usuarioRepository,
+                selectorPrioridad,
+                selectorAsignacion,
+                selectorNotificacion,
+                asignacionService
         );
-        
+
         AuthService authService = new AuthServiceImpl(
-            usuarioRepository,
-            ticketRepository
+                usuarioRepository,
+                ticketRepository
         );
-        
+
         contexto.setAttribute(TICKET_SERVICE, ticketService);
         contexto.setAttribute(ASIGNACION_SERVICE, asignacionService);
         contexto.setAttribute(AUTH_SERVICE, authService);
@@ -84,7 +84,8 @@ public class AppContextListener implements ServletContextListener {
         contexto.setAttribute(CATEGORIA_REPOSITORY, categoriaRepository);
         contexto.setAttribute(USUARIO_REPOSITORY, usuarioRepository);
         contexto.setAttribute(TICKET_REPOSITORY, ticketRepository);
-        
+        contexto.setAttribute(NOTIFICACION_APP, notificacionApp);
+
         System.out.println("=============================================");
         System.out.println("🚀 MESA DE AYUDA CIMM - INICIADA");
         System.out.println("=============================================");
@@ -95,7 +96,7 @@ public class AppContextListener implements ServletContextListener {
         System.out.println("  Contraseña para todos: 12345");
         System.out.println("=============================================");
     }
-    
+
     @Override
     public void contextDestroyed(ServletContextEvent evento) {
         System.out.println("🛑 MESA DE AYUDA CIMM - DETENIDA");

@@ -1191,13 +1191,13 @@
 
                                     </c:when>
 
-                                    <c:when test="${estado == 'resolver'}">
+                                    <c:when test="${estado == 'resuelto'}">
 
                                         ✅ Resolver
 
                                     </c:when>
 
-                                    <c:when test="${estado == 'cerrar'}">
+                                    <c:when test="${estado == 'cerrado'}">
 
                                         📁 Cerrar
 
@@ -1354,9 +1354,7 @@
 
                 <div class="form-comentario">
 
-                    <form
-                        method="post"
-                        action="${pageContext.request.contextPath}/ticket/accion">
+                    <form method="post" action="/mesaDeAyuda/ticket/accion">
 
                         <input
                             type="hidden"

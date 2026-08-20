@@ -1,6 +1,7 @@
 co\edu\sena\mesaDeAyuda\modelo\Usuario$Rol.class
 co\edu\sena\mesaDeAyuda\servicio\notificacion\NotificacionSMS.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoResuelto.class
+co\edu\sena\mesaDeAyuda\web\NotificacionServlet.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoCerrado.class
 co\edu\sena\mesaDeAyuda\servicio\prioridad\PrioridadPorCategoria.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoEnProceso.class

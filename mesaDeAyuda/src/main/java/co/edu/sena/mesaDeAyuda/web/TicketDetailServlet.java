@@ -83,9 +83,9 @@ public class TicketDetailServlet extends HttpServlet {
             case "ASIGNADO" ->
                 new String[]{"iniciar"};
             case "EN_PROCESO" ->
-                new String[]{"resolver"};
+                new String[]{"resuelto"};
             case "RESUELTO" ->
-                new String[]{"cerrar", "reabrir"};
+                new String[]{"cerrado", "reabrir"};
             default ->
                 new String[]{};
         };

@@ -8,6 +8,8 @@ import co.edu.sena.mesaDeAyuda.modelo.Usuario;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,60 +18,79 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author halfo
  */
 public class NotificacionApp implements NotificacionStrategy {
-    
-    private static final DateTimeFormatter FORMATTER = 
+
+    private static final DateTimeFormatter FORMATTER =
         DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-    
-    // Almacena notificaciones no leídas por usuario
-    private final Map<Long, StringBuilder> notificacionesPendientes = new ConcurrentHashMap<>();
-    
+
+    // Almacena notificaciones por usuario
+    private final Map<Long, List<String>> notificacionesPendientes = new ConcurrentHashMap<>();
+
     @Override
     public void notificar(Usuario usuario, String mensaje) {
         if (usuario == null) return;
-        
+
         String fecha = LocalDateTime.now().format(FORMATTER);
-        
-        // Almacenar notificación en memoria
+        String notificacion = "[" + fecha + "] " + mensaje;
+
         notificacionesPendientes.computeIfAbsent(
-            usuario.getId(), 
-            k -> new StringBuilder()
-        ).append("[").append(fecha).append("] ").append(mensaje).append("\n");
-        
-        // Mostrar en consola
+            usuario.getId(),
+            k -> new ArrayList<>()
+        ).add(notificacion);
+
+        // Log en consola
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.println("📲 NOTIFICACIÓN EN APLICACIÓN");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.println("  Para: " + usuario.getNombre());
+        System.out.println("  Para: " + usuario.getNombre() + " (" + usuario.getRol().getNombre() + ")");
         System.out.println("  Fecha: " + fecha);
         System.out.println("  Mensaje: " + mensaje);
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        
-        // En un sistema real, aquí se guardaría en la base de datos
-        // y se enviaría mediante WebSocket para notificaciones en tiempo real
     }
-    
+
     /**
-     * Obtiene todas las notificaciones pendientes de un usuario
+     * Envía notificación con información del rol que la dispara
      */
-    public String obtenerNotificaciones(Usuario usuario) {
-        if (usuario == null) return "";
-        StringBuilder notificaciones = notificacionesPendientes.get(usuario.getId());
-        return notificaciones != null ? notificaciones.toString() : "";
+    public void notificarConRol(Usuario destinatario, String mensaje, Usuario emisor) {
+        String rolEmisor = emisor != null ? emisor.getRol().getNombre() : "Sistema";
+        String mensajeCompleto = "[" + rolEmisor + "] " + mensaje;
+        notificar(destinatario, mensajeCompleto);
     }
-    
-    /**
-     * Marca como leídas todas las notificaciones de un usuario
-     */
+
+    // ========== MÉTODOS PARA LA WEB ==========
+
+    public List<String> obtenerListaNotificaciones(Usuario usuario) {
+        if (usuario == null) return List.of();
+        List<String> notificaciones = notificacionesPendientes.get(usuario.getId());
+        return notificaciones != null ? new ArrayList<>(notificaciones) : List.of();
+    }
+
+    public int contarNoLeidas(Usuario usuario) {
+        if (usuario == null) return 0;
+        List<String> notificaciones = notificacionesPendientes.get(usuario.getId());
+        return notificaciones != null ? notificaciones.size() : 0;
+    }
+
     public void marcarComoLeidas(Usuario usuario) {
         if (usuario == null) return;
         notificacionesPendientes.remove(usuario.getId());
     }
-    
+
+    public void marcarComoLeida(Usuario usuario, int index) {
+        if (usuario == null) return;
+        List<String> notificaciones = notificacionesPendientes.get(usuario.getId());
+        if (notificaciones != null && index >= 0 && index < notificaciones.size()) {
+            notificaciones.remove(index);
+            if (notificaciones.isEmpty()) {
+                notificacionesPendientes.remove(usuario.getId());
+            }
+        }
+    }
+
     @Override
     public String nombre() {
         return "Notificación en App";
     }
-    
+
     @Override
     public String descripcion() {
         return "Muestra notificaciones dentro de la aplicación.";
