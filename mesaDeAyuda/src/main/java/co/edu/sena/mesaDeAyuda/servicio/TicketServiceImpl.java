@@ -82,7 +82,7 @@ public class TicketServiceImpl implements TicketService {
 
         ticketRepository.guardar(ticket);
 
-        notificarCambioEstado(ticket, "creado");
+        notificarCambioEstado(ticket, "creado", solicitante);
 
         return TicketMapper.aDTO(ticket);
     }
@@ -140,9 +140,9 @@ public class TicketServiceImpl implements TicketService {
                 }
                 case "iniciar" ->
                     ticket.iniciar();
-                case "resolver" ->
+                case "resuelto" ->
                     ticket.resolver();
-                case "cerrar" ->
+                case "cerrado" ->
                     ticket.cerrar();
                 case "reabrir" ->
                     ticket.reabrir();
@@ -161,7 +161,7 @@ public class TicketServiceImpl implements TicketService {
 
         ticketRepository.guardar(ticket);
 
-        notificarCambioEstado(ticket, accion);
+        notificarCambioEstado(ticket, accion, usuario);
 
         return TicketMapper.aDTO(ticket);
     }
@@ -211,7 +211,7 @@ public class TicketServiceImpl implements TicketService {
         ticket.asignar(agente);
         ticketRepository.guardar(ticket);
 
-        notificarCambioEstado(ticket, "asignado");
+        notificarCambioEstado(ticket, "asignado", agente);
 
         return TicketMapper.aDTO(ticket);
     }
@@ -248,7 +248,7 @@ public class TicketServiceImpl implements TicketService {
 
         ticketRepository.guardar(ticket);
 
-        notificarCambioEstado(ticket, "reasignado");
+        notificarCambioEstado(ticket, "reasignado a " + nuevoAgente.getNombre(), admin);
 
         return TicketMapper.aDTO(ticket);
     }
@@ -316,25 +316,39 @@ public class TicketServiceImpl implements TicketService {
         );
     }
 
-    private void notificarCambioEstado(Ticket ticket, String accion) {
+    private void notificarCambioEstado(Ticket ticket, String accion, Usuario ejecutor) {
         try {
             NotificacionStrategy notificador = selectorNotificacion.resolver("DEFAULT")
                     .orElseThrow(() -> new IllegalStateException("No hay notificador disponible"));
 
             String mensaje = String.format(
-                    "Ticket #%d: %s - El ticket ha sido %s",
+                    "Ticket #%d: %s - %s",
                     ticket.getId(),
                     ticket.getTitulo(),
                     accion
             );
 
+            // 1. NOTIFICAR AL SOLICITANTE 
             notificador.notificar(ticket.getSolicitante(), mensaje);
 
-            if (ticket.getAgente() != null) {
+            // 2. NOTIFICAR AL AGENTE
+            if (ticket.getAgente() != null
+                    && (ejecutor == null || !ejecutor.getId().equals(ticket.getAgente().getId()))) {
                 notificador.notificar(ticket.getAgente(), mensaje);
             }
-        } catch (Exception e) {
 
+            // 3. NOTIFICAR AL ADMINISTRADOR 
+            if ("resuelto".equalsIgnoreCase(accion) || "cerrado".equalsIgnoreCase(accion)) {
+                List<Usuario> admins = usuarioRepository.buscarPorRol(Usuario.Rol.ADMIN);
+                for (Usuario admin : admins) {
+                    // No notificar al admin si fue él quien ejecutó la acción
+                    if (ejecutor == null || !ejecutor.getId().equals(admin.getId())) {
+                        notificador.notificar(admin, "📊 " + mensaje + " - Ticket finalizado");
+                    }
+                }
+            }
+
+        } catch (Exception e) {
             System.err.println("Error al notificar: " + e.getMessage());
         }
     }
