@@ -11,7 +11,7 @@ package co.edu.sena.mesaDeAyuda.modelo.estado;
 public class EstadoTicketFactory {
     
     private EstadoTicketFactory() {
-        // Clase de utilidad, no se instancia
+        
     }
     
     public static EstadoTicket crear(String nombre) {

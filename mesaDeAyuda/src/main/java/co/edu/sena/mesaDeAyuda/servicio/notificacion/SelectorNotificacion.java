@@ -28,7 +28,7 @@ public class SelectorNotificacion {
             this.estrategias.put("DEFAULT", app);
         } else {            
             this.estrategias.put("DEFAULT", new NotificacionCorreo());
-        }
+        }  
     }
     
     public Optional<NotificacionStrategy> resolver(String clave) {
