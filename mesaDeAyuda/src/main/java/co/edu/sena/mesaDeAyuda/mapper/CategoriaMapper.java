@@ -41,21 +41,20 @@ public final class CategoriaMapper {
     public static Categoria aEntidad(CategoriaDTO categoriaDTO) {
         if (categoriaDTO == null) return null;
         
-        // Verificar si tiene ID (categoría existente)
+       
         if (categoriaDTO.getId() != null) {
             return new Categoria(
                 categoriaDTO.getId(),
                 categoriaDTO.getNombre(),
                 categoriaDTO.getDescripcion(),
-                categoriaDTO.getNombre()  // ← claveAsignacion
+                categoriaDTO.getNombre() 
             );
         }
         
-        // Categoría nueva (sin ID)
         return new Categoria(
             categoriaDTO.getNombre(),
             categoriaDTO.getDescripcion(),
-            categoriaDTO.getNombre()  // ← claveAsignacion
+            categoriaDTO.getNombre()  
         );
     }
 }

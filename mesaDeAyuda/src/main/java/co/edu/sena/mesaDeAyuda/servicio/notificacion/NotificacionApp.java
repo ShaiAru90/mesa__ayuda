@@ -22,7 +22,6 @@ public class NotificacionApp implements NotificacionStrategy {
     private static final DateTimeFormatter FORMATTER =
         DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    // Almacena notificaciones por usuario
     private final Map<Long, List<String>> notificacionesPendientes = new ConcurrentHashMap<>();
 
     @Override
@@ -37,7 +36,6 @@ public class NotificacionApp implements NotificacionStrategy {
             k -> new ArrayList<>()
         ).add(notificacion);
 
-        // Log en consola
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.println("📲 NOTIFICACIÓN EN APLICACIÓN");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -47,16 +45,12 @@ public class NotificacionApp implements NotificacionStrategy {
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     }
 
-    /**
-     * Envía notificación con información del rol que la dispara
-     */
+   
     public void notificarConRol(Usuario destinatario, String mensaje, Usuario emisor) {
         String rolEmisor = emisor != null ? emisor.getRol().getNombre() : "Sistema";
         String mensajeCompleto = "[" + rolEmisor + "] " + mensaje;
         notificar(destinatario, mensajeCompleto);
     }
-
-    // ========== MÉTODOS PARA LA WEB ==========
 
     public List<String> obtenerListaNotificaciones(Usuario usuario) {
         if (usuario == null) return List.of();

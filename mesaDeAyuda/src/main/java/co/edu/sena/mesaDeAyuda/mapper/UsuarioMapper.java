@@ -53,7 +53,7 @@ public final class UsuarioMapper {
                 usuarioDTO.getId(),
                 usuarioDTO.getNombre(),
                 usuarioDTO.getCorreo(),
-                null, // La contraseña no se incluye en el DTO por seguridad
+                null, 
                 Usuario.Rol.valueOf(usuarioDTO.getRol())
         );
     }

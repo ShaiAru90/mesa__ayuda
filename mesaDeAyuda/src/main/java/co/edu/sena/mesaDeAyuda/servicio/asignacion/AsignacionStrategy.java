@@ -15,23 +15,11 @@ import java.util.List;
  */
 public interface AsignacionStrategy {
     
-    /**
-     * Asigna un agente de la lista al ticket según la estrategia.
-     * 
-     * @param agentes Lista de agentes disponibles
-     * @param ticket  Ticket a asignar
-     * @return Usuario agente asignado
-     */
+    
     Usuario asignar(List<Usuario> agentes, Ticket ticket);
     
-    /**
-     * Nombre de la estrategia para mostrar en la interfaz
-     */
     String nombre();
     
-    /**
-     * Descripción de la estrategia
-     */
     default String descripcion() {
         return "Estrategia de asignación: " + nombre();
     }

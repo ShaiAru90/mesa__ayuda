@@ -20,7 +20,6 @@ public class PrioridadPorCategoria implements PrioridadStrategy {
     private final Map<String, Prioridad> prioridadPorCategoria = new ConcurrentHashMap<>();
     
     public PrioridadPorCategoria() {
-        // Configuración inicial de prioridades por categoría
         prioridadPorCategoria.put("Redes", Prioridad.ALTA);
         prioridadPorCategoria.put("Hardware", Prioridad.MEDIA);
         prioridadPorCategoria.put("Software", Prioridad.MEDIA);
@@ -41,9 +40,6 @@ public class PrioridadPorCategoria implements PrioridadStrategy {
         );
     }
     
-    /**
-     * Configura la prioridad para una categoría específica
-     */
     public void configurarPrioridad(String categoria, Prioridad prioridad) {
         prioridadPorCategoria.put(categoria, prioridad);
     }

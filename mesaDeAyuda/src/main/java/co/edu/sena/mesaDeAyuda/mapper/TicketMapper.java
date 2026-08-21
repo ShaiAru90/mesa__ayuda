@@ -37,10 +37,7 @@ public final class TicketMapper {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Convierte una lista de tickets a DTO, filtrados por visibilidad del
-     * usuario
-     */
+    
     public static List<TicketDTO> aDTOConVisibilidad(List<Ticket> tickets) {
         if (tickets == null) {
             return List.of();

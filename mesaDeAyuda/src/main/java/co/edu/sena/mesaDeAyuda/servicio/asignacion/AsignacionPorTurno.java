@@ -25,7 +25,6 @@ public class AsignacionPorTurno implements AsignacionStrategy {
             throw new SinAgentesDisponiblesException();
         }
         
-        // Calcular índice siguiente (Round Robin)
         int indice = contador.getAndIncrement() % agentes.size();
         return agentes.get(indice);
     }

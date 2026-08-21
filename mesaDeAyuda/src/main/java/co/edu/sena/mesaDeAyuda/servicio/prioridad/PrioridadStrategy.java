@@ -14,23 +14,11 @@ import co.edu.sena.mesaDeAyuda.modelo.Prioridad;
  */
 public interface PrioridadStrategy {
     
-    /**
-     * Calcula la prioridad del ticket según la estrategia.
-     * 
-     * @param ticketDTO Datos del ticket
-     * @param categoria Categoría del ticket
-     * @return Prioridad calculada
-     */
+   
     Prioridad calcular(TicketDTO ticketDTO, Categoria categoria);
-    
-    /**
-     * Nombre de la estrategia
-     */
+       
     String nombre();
     
-    /**
-     * Descripción de la estrategia
-     */
     default String descripcion() {
         return "Estrategia de prioridad: " + nombre();
     }

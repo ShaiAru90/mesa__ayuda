@@ -15,7 +15,7 @@ public class PrioridadDTO {
     private final String nombre;
     private final String slaDescripcion;
     private final int nivel;
-    private final String claseCss; // Para estilos en la vista
+    private final String claseCss; 
     
     public PrioridadDTO(String nombre, String slaDescripcion, int nivel) {
         this.nombre = nombre;

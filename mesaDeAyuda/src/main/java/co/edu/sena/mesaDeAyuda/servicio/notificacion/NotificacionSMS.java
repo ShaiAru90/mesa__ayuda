@@ -24,7 +24,6 @@ public class NotificacionSMS implements NotificacionStrategy {
         
         String fecha = LocalDateTime.now().format(FORMATTER);
         
-        // Simulación de envío de SMS
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.println("📱 ENVIANDO SMS");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -33,13 +32,8 @@ public class NotificacionSMS implements NotificacionStrategy {
         System.out.println("  Mensaje: " + truncarMensaje(mensaje, 160));
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         
-        // En un sistema real, aquí iría la integración con API de SMS
-        // Ejemplo: Twilio, MessageBird, etc.
     }
-    
-    /**
-     * Trunca el mensaje a 160 caracteres (límite de SMS)
-     */
+   
     private String truncarMensaje(String mensaje, int maxLength) {
         if (mensaje == null) return "";
         if (mensaje.length() <= maxLength) return mensaje;

@@ -328,20 +328,16 @@ public class TicketServiceImpl implements TicketService {
                     accion
             );
 
-            // 1. NOTIFICAR AL SOLICITANTE 
             notificador.notificar(ticket.getSolicitante(), mensaje);
 
-            // 2. NOTIFICAR AL AGENTE
             if (ticket.getAgente() != null
                     && (ejecutor == null || !ejecutor.getId().equals(ticket.getAgente().getId()))) {
                 notificador.notificar(ticket.getAgente(), mensaje);
             }
 
-            // 3. NOTIFICAR AL ADMINISTRADOR 
             if ("resuelto".equalsIgnoreCase(accion) || "cerrado".equalsIgnoreCase(accion)) {
                 List<Usuario> admins = usuarioRepository.buscarPorRol(Usuario.Rol.ADMIN);
                 for (Usuario admin : admins) {
-                    // No notificar al admin si fue él quien ejecutó la acción
                     if (ejecutor == null || !ejecutor.getId().equals(admin.getId())) {
                         notificador.notificar(admin, "📊 " + mensaje + " - Ticket finalizado");
                     }

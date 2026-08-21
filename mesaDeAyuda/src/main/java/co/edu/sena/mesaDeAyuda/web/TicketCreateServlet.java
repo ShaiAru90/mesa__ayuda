@@ -54,23 +54,23 @@ public class TicketCreateServlet extends HttpServlet {
         String descripcion = request.getParameter("descripcion");
         String categoriaNombre = request.getParameter("categoria");
         
-        // Crear DTO - ✅ CORREGIDO: No pasar null en estado
+        
         CategoriaDTO categoria = new CategoriaDTO(null, categoriaNombre, "");
         
         TicketDTO ticketDTO = new TicketDTO(
-            null,                           // id
-            titulo,                         // titulo
-            descripcion,                    // descripcion
-            categoria,                      // categoria
-            null,                           // prioridad (se calculará)
-            null,                           // solicitante (se asignará)
-            null,                           // agente (se asignará)
-            null,                           // estado (se calculará) ← AHORA ES NULL
-            null,                           // estadoDescripcion
-            null,                           // fechaCreacion
-            null,                           // fechaActualizacion
-            null,                           // fechaResolucion
-            new ArrayList<>()               // comentarios
+            null,                          
+            titulo,                         
+            descripcion,                    
+            categoria,                      
+            null,                          
+            null,                           
+            null,                           
+            null,                          
+            null,                          
+            null,                          
+            null,                           
+            null,                           
+            new ArrayList<>()               
         );
         
         TicketService ticketService = 
