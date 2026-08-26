@@ -21,7 +21,6 @@ co\edu\sena\mesaDeAyuda\modelo\UsuarioBuilder.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoCancelado.class
 co\edu\sena\mesaDeAyuda\servicio\notificacion\NotificacionStrategy.class
 co\edu\sena\mesaDeAyuda\servicio\prioridad\PrioridadStrategy.class
-co\edu\sena\mesaDeAyuda\servicio\PrioridadServiceImpl.class
 co\edu\sena\mesaDeAyuda\servicio\excepcion\TransicionEstadoInvalidaException.class
 co\edu\sena\mesaDeAyuda\servicio\asignacion\AsignacionPorCategoria.class
 co\edu\sena\mesaDeAyuda\servicio\asignacion\AsignacionPorTurno.class
@@ -42,7 +41,6 @@ co\edu\sena\mesaDeAyuda\servicio\AsignacionServiceImpl.class
 co\edu\sena\mesaDeAyuda\web\SesionUsuario.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoTicketFactory.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoAsignado.class
-co\edu\sena\mesaDeAyuda\servicio\PrioridadService.class
 co\edu\sena\mesaDeAyuda\dto\PrioridadDTO.class
 co\edu\sena\mesaDeAyuda\mapper\UsuarioMapper.class
 co\edu\sena\mesaDeAyuda\servicio\AuthServiceImpl.class
@@ -56,12 +54,14 @@ co\edu\sena\mesaDeAyuda\servicio\AuthService.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoNuevo.class
 co\edu\sena\mesaDeAyuda\mapper\ComentarioMapper.class
 co\edu\sena\mesaDeAyuda\repositorio\UsuarioRepositoryEnMemoria.class
+co\edu\sena\mesaDeAyuda\servicio\notificacion\NotificacionCorreoReal$1.class
 co\edu\sena\mesaDeAyuda\modelo\Ticket.class
 co\edu\sena\mesaDeAyuda\servicio\notificacion\SelectorNotificacion.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoTicket.class
 co\edu\sena\mesaDeAyuda\servicio\notificacion\NotificacionCorreo.class
 co\edu\sena\mesaDeAyuda\servicio\asignacion\SelectorAsignacion.class
 co\edu\sena\mesaDeAyuda\web\LogoutServlet.class
+co\edu\sena\mesaDeAyuda\servicio\notificacion\NotificacionCorreoReal.class
 co\edu\sena\mesaDeAyuda\web\TicketDetailServlet.class
 co\edu\sena\mesaDeAyuda\modelo\TicketBuilder.class
 co\edu\sena\mesaDeAyuda\servicio\asignacion\AsignacionStrategy.class

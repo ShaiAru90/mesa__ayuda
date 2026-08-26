@@ -18,16 +18,30 @@ public class SelectorNotificacion {
     
     private final Map<String, NotificacionStrategy> estrategias = new LinkedHashMap<>();
     
-    public SelectorNotificacion(List<NotificacionStrategy> estrategias) {
+   public SelectorNotificacion(List<NotificacionStrategy> estrategias) {
+        
         for (NotificacionStrategy estrategia : estrategias) {
             this.estrategias.put(estrategia.getClass().getSimpleName(), estrategia);
+            System.out.println("  📨 Registrada: " + estrategia.getClass().getSimpleName());
+        }       
+       
+        NotificacionStrategy defaultStrategy = this.estrategias.get("NotificacionCorreoReal");
+                
+        if (defaultStrategy == null) {
+            defaultStrategy = this.estrategias.get("NotificacionApp");
+        }
+                
+        if (defaultStrategy == null) {
+            defaultStrategy = this.estrategias.get("NotificacionCorreo");
+        }
+                
+        if (defaultStrategy == null && !this.estrategias.isEmpty()) {
+            defaultStrategy = this.estrategias.values().iterator().next();
         }
         
-        NotificacionStrategy app = this.estrategias.get("NotificacionApp");
-        if (app != null) {
-            this.estrategias.put("DEFAULT", app);
-        } else {            
-            this.estrategias.put("DEFAULT", new NotificacionCorreo());
+        if (defaultStrategy != null) {
+            this.estrategias.put("DEFAULT", defaultStrategy);
+            System.out.println("  📨 DEFAULT → " + defaultStrategy.nombre());
         }
     }
     

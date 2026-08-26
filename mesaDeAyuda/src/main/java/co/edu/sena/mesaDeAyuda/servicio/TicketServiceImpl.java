@@ -317,35 +317,54 @@ public class TicketServiceImpl implements TicketService {
     }
 
     private void notificarCambioEstado(Ticket ticket, String accion, Usuario ejecutor) {
-        try {
-            NotificacionStrategy notificador = selectorNotificacion.resolver("DEFAULT")
-                    .orElseThrow(() -> new IllegalStateException("No hay notificador disponible"));
+    try {
+        String mensaje = String.format(
+                "Ticket #%d: %s - %s",
+                ticket.getId(),
+                ticket.getTitulo(),
+                accion
+        );
 
-            String mensaje = String.format(
-                    "Ticket #%d: %s - %s",
-                    ticket.getId(),
-                    ticket.getTitulo(),
-                    accion
-            );
-
-            notificador.notificar(ticket.getSolicitante(), mensaje);
-
-            if (ticket.getAgente() != null
-                    && (ejecutor == null || !ejecutor.getId().equals(ticket.getAgente().getId()))) {
-                notificador.notificar(ticket.getAgente(), mensaje);
-            }
-
-            if ("resuelto".equalsIgnoreCase(accion) || "cerrado".equalsIgnoreCase(accion)) {
-                List<Usuario> admins = usuarioRepository.buscarPorRol(Usuario.Rol.ADMIN);
-                for (Usuario admin : admins) {
-                    if (ejecutor == null || !ejecutor.getId().equals(admin.getId())) {
-                        notificador.notificar(admin, "📊 " + mensaje + " - Ticket finalizado");
+        // ========== OBTENER TODAS LAS ESTRATEGIAS DISPONIBLES ==========
+        List<NotificacionStrategy> estrategias = selectorNotificacion.disponibles();
+        
+        System.out.println("📨 Enviando notificaciones a través de " + estrategias.size() + " canales");
+        
+        for (NotificacionStrategy notificador : estrategias) {
+            try {
+                // 1. Notificar al solicitante
+                notificador.notificar(ticket.getSolicitante(), mensaje);
+                
+                // 2. Notificar al agente (si existe y no es el ejecutor)
+                if (ticket.getAgente() != null && 
+                    (ejecutor == null || !ejecutor.getId().equals(ticket.getAgente().getId()))) {
+                    notificador.notificar(ticket.getAgente(), mensaje);
+                }
+                
+                // 3. Notificar al administrador (si el ticket se resuelve o cierra)
+                String estadoTicket = ticket.getEstadoNombre();
+                boolean esEstadoTerminal = "RESUELTO".equals(estadoTicket) || "CERRADO".equals(estadoTicket);
+                
+                if (esEstadoTerminal) {
+                    List<Usuario> admins = usuarioRepository.buscarPorRol(Usuario.Rol.ADMIN);
+                    for (Usuario admin : admins) {
+                        if (ejecutor == null || !ejecutor.getId().equals(admin.getId())) {
+                            notificador.notificar(admin, "📊 " + mensaje + " - Ticket " + estadoTicket.toLowerCase());
+                        }
                     }
                 }
+                
+                System.out.println("  ✅ Notificación enviada por: " + notificador.nombre());
+                
+            } catch (Exception e) {
+                // 🔹 Si falla una estrategia, continuamos con la siguiente
+                System.err.println("  ❌ Error en notificador " + notificador.nombre() + ": " + e.getMessage());
             }
-
-        } catch (Exception e) {
-            System.err.println("Error al notificar: " + e.getMessage());
         }
+
+    } catch (Exception e) {
+        System.err.println("❌ Error general al notificar: " + e.getMessage());
+        e.printStackTrace();
     }
+}
 }

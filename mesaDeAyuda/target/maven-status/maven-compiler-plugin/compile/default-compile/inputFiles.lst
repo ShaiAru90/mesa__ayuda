@@ -22,6 +22,7 @@ C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\e
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\repositorio\UsuarioRepositoryEnMemoria.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\servicio\excepcion\SinAgentesDisponiblesException.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\servicio\AsignacionService.java
+C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\servicio\notificacion\NotificacionCorreoReal.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\web\LogoutServlet.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\web\TicketServlet.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\servicio\excepcion\AccesoDenegadoException.java
@@ -40,7 +41,6 @@ C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\e
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\modelo\estado\EstadoResuelto.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\servicio\asignacion\AsignacionPorCategoria.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\mapper\TicketMapper.java
-C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\servicio\PrioridadServiceImpl.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\modelo\estado\EstadoTicketFactory.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\mapper\CategoriaMapper.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\servicio\asignacion\SelectorAsignacion.java
@@ -52,7 +52,6 @@ C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\e
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\servicio\notificacion\NotificacionApp.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\dto\CategoriaDTO.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\web\NotificacionServlet.java
-C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\servicio\PrioridadService.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\modelo\Categoria.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\web\TicketCreateServlet.java
 C:\Users\PC_21\source\repos\MesaAyuda\mesa__ayuda\mesaDeAyuda\src\main\java\co\edu\sena\mesaDeAyuda\modelo\estado\EstadoTicket.java

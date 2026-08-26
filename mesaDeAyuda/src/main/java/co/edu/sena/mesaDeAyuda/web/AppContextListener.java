@@ -39,6 +39,32 @@ public class AppContextListener implements ServletContextListener {
         CategoriaRepository categoriaRepository = new CategoriaRepositoryEnMemoria();
         NotificacionApp notificacionApp = new NotificacionApp();
 
+        NotificacionCorreoReal notificacionCorreoReal = null;
+        try {
+            // 🔹 INTENTAR CON VARIABLES DE ENTORNO (RECOMENDADO)
+            String correoEmisor = System.getenv("mesiasgoat777@gmail.com");
+            String passwordEmisor = System.getenv("qousnbnvolyairrq");
+
+           
+            if (correoEmisor == null || correoEmisor.isEmpty() || passwordEmisor == null || passwordEmisor.isEmpty()) {
+                
+                correoEmisor = "tu_correo@gmail.com";
+                passwordEmisor = "tu_contraseña_app";
+                System.out.println("⚠️ [CorreoReal] Usando credenciales directas (solo pruebas)");
+            }
+
+            if (correoEmisor != null && !correoEmisor.isEmpty()) {
+                notificacionCorreoReal = new NotificacionCorreoReal(correoEmisor, passwordEmisor);
+                System.out.println("✅ [CorreoReal] Configurado con: " + correoEmisor);
+            } else {
+                System.out.println("⚠️ [CorreoReal] No se encontraron credenciales");
+                notificacionCorreoReal = new NotificacionCorreoReal("test@test.com", "password");
+            }
+        } catch (Exception e) {
+            System.err.println("❌ [CorreoReal] Error al configurar: " + e.getMessage());
+            notificacionCorreoReal = new NotificacionCorreoReal("test@test.com", "password");
+        }
+
         SelectorAsignacion selectorAsignacion = new SelectorAsignacion(List.of(
                 new AsignacionPorTurno(),
                 new AsignacionPorCarga(),
@@ -53,7 +79,8 @@ public class AppContextListener implements ServletContextListener {
         SelectorNotificacion selectorNotificacion = new SelectorNotificacion(List.of(
                 new NotificacionCorreo(),
                 new NotificacionSMS(),
-                notificacionApp
+                notificacionApp,
+                notificacionCorreoReal
         ));
 
         AsignacionService asignacionService = new AsignacionServiceImpl(

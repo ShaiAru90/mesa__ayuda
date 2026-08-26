@@ -174,11 +174,7 @@
                 </c:otherwise>
             </c:choose>
 
-            <div class="acciones">
-                <a href="${pageContext.request.contextPath}/tickets" class="btn btn-volver">
-                    ← Volver a mis tickets
-                </a>
-            </div>
+            
         </div>
 
         <div class="volver-inicio">

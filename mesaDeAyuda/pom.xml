@@ -18,6 +18,19 @@
     
     <dependencies>
         
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
+        <!-- Activation Framework (necesario para JavaMail) -->
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        
         <!-- Servlet API -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -95,7 +108,18 @@
                             </artifactItems>
                         </configuration>
                     </execution>
-                </executions>
+                </executions>                
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <environmentVariables>
+                        <MAIL_USERNAME>mesiasgoat777@gmail.com</MAIL_USERNAME>
+                        <MAIL_PASSWORD>qousnbnvolyairrq</MAIL_PASSWORD>
+                    </environmentVariables>
+                </configuration>
             </plugin>
         </plugins>
     </build>
