@@ -1418,6 +1418,62 @@
 
             </section>
 
+            <c:if test="${mostrarOTP}">
+                <div class="otp-section" style="
+                     background: #f0fdf4;
+                     border: 1px solid #bbf7d0;
+                     border-radius: 16px;
+                     padding: 1.2rem;
+                     margin-top: 1rem;
+                     ">
+                    <h4 style="font-size: 0.9rem; font-weight: 800; color: #166534; margin-bottom: 0.5rem;">
+                        🔐 Confirmar cierre con OTP
+                    </h4>
+                    <p style="font-size: 0.8rem; color: #4b7c5e; margin-bottom: 0.8rem;">
+                        Ingresa el código de 6 dígitos que recibiste por correo para cerrar el ticket.
+                    </p>
+
+                    <form method="post" action="${pageContext.request.contextPath}/ticket/accion">
+                        <input type="hidden" name="ticketId" value="${ticket.id}">
+                        <input type="hidden" name="accion" value="cerrar-con-otp">
+
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                            <input
+                                type="text"
+                                name="codigoOTP"
+                                placeholder="Ej: 123456"
+                                pattern="[0-9]{6}"
+                                maxlength="6"
+                                style="
+                                width: 180px;
+                                padding: 0.6rem 1rem;
+                                border: 1px solid #bbf7d0;
+                                border-radius: 10px;
+                                font-size: 1.2rem;
+                                font-weight: 700;
+                                letter-spacing: 0.3em;
+                                text-align: center;
+                                background: white;
+                                font-family: monospace;
+                                "
+                                required
+                                >
+                            <button type="submit" class="btn btn-accion" style="min-height: 46px;">
+                                ✅ Cerrar con OTP
+                            </button>
+                            <button
+                                type="button"
+                                onclick="reenviarOTP(${ticket.id})"
+                                class="btn btn-secundario"
+                                style="min-height: 46px; background: #f1f5f9; border: 1px solid #e2e8f0; padding: 0 1rem; border-radius: 10px; font-weight: 700; cursor: pointer;"
+                                >
+                                📨 Reenviar OTP
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </c:if>
+
 
         </main>
 
@@ -1427,5 +1483,29 @@
             />
 
     </body>
+
+    <script>
+        function reenviarOTP(ticketId) {
+            if (confirm('¿Reenviar el código OTP al correo del solicitante?')) {
+                fetch('${pageContext.request.contextPath}/ticket/accion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'ticketId=' + ticketId + '&accion=reenviar-otp'
+                })
+                        .then(response => {
+                            if (response.ok) {
+                                alert('✅ Código OTP reenviado al correo del solicitante.');
+                            } else {
+                                alert('❌ Error al reenviar el OTP.');
+                            }
+                        })
+                        .catch(error => {
+                            alert('❌ Error: ' + error.message);
+                        });
+            }
+        }
+    </script>
 
 </html>

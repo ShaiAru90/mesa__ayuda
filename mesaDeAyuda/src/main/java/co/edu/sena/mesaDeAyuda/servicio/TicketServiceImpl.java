@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package co.edu.sena.mesaDeAyuda.servicio;
 
 import co.edu.sena.mesaDeAyuda.dto.ComentarioDTO;
+import co.edu.sena.mesaDeAyuda.dto.OTPDTO;
 import co.edu.sena.mesaDeAyuda.dto.TicketDTO;
 import co.edu.sena.mesaDeAyuda.mapper.TicketMapper;
 import co.edu.sena.mesaDeAyuda.mapper.UsuarioMapper;
@@ -32,19 +29,22 @@ public class TicketServiceImpl implements TicketService {
     private final SelectorNotificacion selectorNotificacion;
     private final AsignacionService asignacionService;
     private final AtomicLong secuenciaId;
+    private final OTPService otpService;
 
     public TicketServiceImpl(TicketRepository ticketRepository,
             UsuarioRepository usuarioRepository,
             SelectorPrioridad selectorPrioridad,
             SelectorAsignacion selectorAsignacion,
             SelectorNotificacion selectorNotificacion,
-            AsignacionService asignacionService) {
+            AsignacionService asignacionService,
+            OTPService otpService) {
         this.ticketRepository = ticketRepository;
         this.usuarioRepository = usuarioRepository;
         this.selectorPrioridad = selectorPrioridad;
         this.selectorAsignacion = selectorAsignacion;
         this.selectorNotificacion = selectorNotificacion;
         this.asignacionService = asignacionService;
+        this.otpService = otpService;
         this.secuenciaId = new AtomicLong(0);
     }
 
@@ -140,10 +140,21 @@ public class TicketServiceImpl implements TicketService {
                 }
                 case "iniciar" ->
                     ticket.iniciar();
-                case "resuelto" ->
-                    ticket.resolver();
-                case "cerrado" ->
-                    ticket.cerrar();
+                case "resuelto" -> {
+                    ticket.resolver();  // ← Cambia a RESUELTO
+
+                    // 🆕 GENERAR OTP AUTOMÁTICAMENTE
+                    try {
+                        System.out.println("🔐 Generando OTP para ticket #" + ticketId);
+                        OTPDTO otpDTO = otpService.generarOTP(ticketId, ticket.getSolicitante());
+                        System.out.println("✅ OTP generado: " + otpDTO.getCodigo());
+                        System.out.println("📨 OTP enviado a: " + ticket.getSolicitante().getCorreo());
+                    } catch (Exception e) {
+                        // Si falla el OTP, no debe bloquear el flujo
+                        System.err.println("❌ Error al generar OTP: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
                 case "reabrir" ->
                     ticket.reabrir();
                 case "cancelar" -> {
@@ -160,7 +171,6 @@ public class TicketServiceImpl implements TicketService {
         }
 
         ticketRepository.guardar(ticket);
-
         notificarCambioEstado(ticket, accion, usuario);
 
         return TicketMapper.aDTO(ticket);
@@ -317,54 +327,84 @@ public class TicketServiceImpl implements TicketService {
     }
 
     private void notificarCambioEstado(Ticket ticket, String accion, Usuario ejecutor) {
-    try {
-        String mensaje = String.format(
-                "Ticket #%d: %s - %s",
-                ticket.getId(),
-                ticket.getTitulo(),
-                accion
-        );
+        try {
+            String mensaje = String.format(
+                    "Ticket #%d: %s - %s",
+                    ticket.getId(),
+                    ticket.getTitulo(),
+                    accion
+            );
 
-        // ========== OBTENER TODAS LAS ESTRATEGIAS DISPONIBLES ==========
-        List<NotificacionStrategy> estrategias = selectorNotificacion.disponibles();
-        
-        System.out.println("📨 Enviando notificaciones a través de " + estrategias.size() + " canales");
-        
-        for (NotificacionStrategy notificador : estrategias) {
-            try {
-                // 1. Notificar al solicitante
-                notificador.notificar(ticket.getSolicitante(), mensaje);
-                
-                // 2. Notificar al agente (si existe y no es el ejecutor)
-                if (ticket.getAgente() != null && 
-                    (ejecutor == null || !ejecutor.getId().equals(ticket.getAgente().getId()))) {
-                    notificador.notificar(ticket.getAgente(), mensaje);
-                }
-                
-                // 3. Notificar al administrador (si el ticket se resuelve o cierra)
-                String estadoTicket = ticket.getEstadoNombre();
-                boolean esEstadoTerminal = "RESUELTO".equals(estadoTicket) || "CERRADO".equals(estadoTicket);
-                
-                if (esEstadoTerminal) {
-                    List<Usuario> admins = usuarioRepository.buscarPorRol(Usuario.Rol.ADMIN);
-                    for (Usuario admin : admins) {
-                        if (ejecutor == null || !ejecutor.getId().equals(admin.getId())) {
-                            notificador.notificar(admin, "📊 " + mensaje + " - Ticket " + estadoTicket.toLowerCase());
+            // ========== OBTENER TODAS LAS ESTRATEGIAS DISPONIBLES ==========
+            List<NotificacionStrategy> estrategias = selectorNotificacion.disponibles();
+
+            System.out.println("📨 Enviando notificaciones a través de " + estrategias.size() + " canales");
+
+            for (NotificacionStrategy notificador : estrategias) {
+                try {
+                    // 1. Notificar al solicitante
+                    notificador.notificar(ticket.getSolicitante(), mensaje);
+
+                    // 2. Notificar al agente (si existe y no es el ejecutor)
+                    if (ticket.getAgente() != null
+                            && (ejecutor == null || !ejecutor.getId().equals(ticket.getAgente().getId()))) {
+                        notificador.notificar(ticket.getAgente(), mensaje);
+                    }
+
+                    // 3. Notificar al administrador (si el ticket se resuelve o cierra)
+                    String estadoTicket = ticket.getEstadoNombre();
+                    boolean esEstadoTerminal = "RESUELTO".equals(estadoTicket) || "CERRADO".equals(estadoTicket);
+
+                    if (esEstadoTerminal) {
+                        List<Usuario> admins = usuarioRepository.buscarPorRol(Usuario.Rol.ADMIN);
+                        for (Usuario admin : admins) {
+                            if (ejecutor == null || !ejecutor.getId().equals(admin.getId())) {
+                                notificador.notificar(admin, "📊 " + mensaje + " - Ticket " + estadoTicket.toLowerCase());
+                            }
                         }
                     }
+
+                    System.out.println("  ✅ Notificación enviada por: " + notificador.nombre());
+
+                } catch (Exception e) {
+                    // 🔹 Si falla una estrategia, continuamos con la siguiente
+                    System.err.println("  ❌ Error en notificador " + notificador.nombre() + ": " + e.getMessage());
                 }
-                
-                System.out.println("  ✅ Notificación enviada por: " + notificador.nombre());
-                
-            } catch (Exception e) {
-                // 🔹 Si falla una estrategia, continuamos con la siguiente
-                System.err.println("  ❌ Error en notificador " + notificador.nombre() + ": " + e.getMessage());
             }
+
+        } catch (Exception e) {
+            System.err.println("❌ Error general al notificar: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public TicketDTO cerrarConOTP(Long ticketId, String codigoOTP, Usuario usuario) {
+        // Validar OTP
+        boolean otpValido = otpService.validarOTP(codigoOTP, ticketId, usuario);
+
+        if (!otpValido) {
+            throw new IllegalStateException("Código OTP inválido");
         }
 
-    } catch (Exception e) {
-        System.err.println("❌ Error general al notificar: " + e.getMessage());
-        e.printStackTrace();
+        // Si OTP es válido, cerrar el ticket
+        Ticket ticket = ticketRepository.buscarPorId(ticketId)
+                .orElseThrow(() -> new TicketNoEncontradoException(ticketId));
+
+        if (!ticket.puedeModificar(usuario)) {
+            throw new AccesoDenegadoException("No tienes permiso para cerrar este ticket");
+        }
+
+        ticket.cerrar();
+        ticketRepository.guardar(ticket);
+
+        notificarCambioEstado(ticket, "cerrado con OTP", usuario);
+
+        return TicketMapper.aDTO(ticket);
     }
-}
+
+    @Override
+    public void reenviarOTP(Long ticketId, Usuario usuario) {
+        otpService.reenviarOTP(ticketId, usuario);
+    }
 }

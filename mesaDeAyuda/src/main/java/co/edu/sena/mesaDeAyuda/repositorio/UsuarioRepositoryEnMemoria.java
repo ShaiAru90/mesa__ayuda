@@ -73,7 +73,7 @@ public class UsuarioRepositoryEnMemoria implements UsuarioRepository {
     
     private void precargarUsuarios() {
        
-        guardar(new Usuario("Juan Pérez", "juan@cimm.edu.co", "12345", Usuario.Rol.SOLICITANTE));
+        guardar(new Usuario("Juan Pérez", "mesiasgoat777@gmail.com", "12345", Usuario.Rol.SOLICITANTE));
         guardar(new Usuario("María Gómez", "maria@cimm.edu.co", "12345", Usuario.Rol.SOLICITANTE));
         guardar(new Usuario("Pedro Rodríguez", "pedro@cimm.edu.co", "12345", Usuario.Rol.SOLICITANTE));
         guardar(new Usuario("Laura Martínez", "laura@cimm.edu.co", "12345", Usuario.Rol.SOLICITANTE));

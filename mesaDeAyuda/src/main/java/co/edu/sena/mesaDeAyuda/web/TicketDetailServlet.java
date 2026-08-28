@@ -63,6 +63,28 @@ public class TicketDetailServlet extends HttpServlet {
             request.setAttribute("puedeComentar", true);
             request.setAttribute("estadosDisponibles", getEstadosDisponibles(ticket));
 
+            boolean mostrarOTP = false;
+
+            // Solo si el ticket está en estado RESUELTO
+            if ("RESUELTO".equals(ticket.getEstado())) {
+                // Solo el SOLICITANTE puede ver el formulario OTP
+                if (usuario != null && ticket.getSolicitante() != null
+                        && usuario.getId().equals(ticket.getSolicitante().getId())) {
+                    mostrarOTP = true;
+                    System.out.println("✅ Mostrando formulario OTP para ticket #" + ticketId);
+                    System.out.println("   Solicitante: " + usuario.getNombre());
+                    System.out.println("   Estado del ticket: " + ticket.getEstado());
+                } else {
+                    System.out.println("⚠️ Usuario NO es el solicitante. No se muestra OTP.");
+                    System.out.println("   Usuario actual: " + usuario.getNombre() + " (ID: " + usuario.getId() + ")");
+                    System.out.println("   Solicitante: " + ticket.getSolicitante().getNombre() + " (ID: " + ticket.getSolicitante().getId() + ")");
+                }
+            } else {
+                System.out.println("⚠️ Ticket NO está en RESUELTO. Estado actual: " + ticket.getEstado());
+            }
+
+            request.setAttribute("mostrarOTP", mostrarOTP);
+
             request.getRequestDispatcher("/WEB-INF/jsp/ticket-detail.jsp").forward(request, response);
 
         } catch (TicketNoEncontradoException e) {

@@ -253,6 +253,11 @@ public class Ticket {
         if (usuario.esAgente()) {
             return this.agente != null && this.agente.getId().equals(usuario.getId());
         }
+        // ✅ NUEVO: El solicitante puede modificar el ticket SOLO si está en RESUELTO
+        if (usuario.esSolicitante()) {
+            return this.estado.nombre().equals("RESUELTO")
+                    && this.solicitante.getId().equals(usuario.getId());
+        }
         return false;
     }
 

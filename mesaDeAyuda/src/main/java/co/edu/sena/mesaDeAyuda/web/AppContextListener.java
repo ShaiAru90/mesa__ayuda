@@ -26,6 +26,7 @@ public class AppContextListener implements ServletContextListener {
     public static final String TICKET_REPOSITORY = "ticketRepository";
     public static final String NOTIFICACION_APP = "notificacionApp";
     public static final String REPORTE_SERVICE = "reporteService";
+    public static final String OTP_SERVICE = "otpService";
 
     @Override
     public void contextInitialized(ServletContextEvent evento) {
@@ -37,6 +38,7 @@ public class AppContextListener implements ServletContextListener {
         NotificacionApp notificacionApp = new NotificacionApp();
 
         ReporteService reporteService = new ReporteServiceImpl(ticketRepository, usuarioRepository);
+        OTPRepository otpRepository = new OTPRepositoryEnMemoria();
 
         NotificacionCorreoReal notificacionCorreoReal = null;
         try {
@@ -75,13 +77,20 @@ public class AppContextListener implements ServletContextListener {
                 usuarioRepository
         );
 
+        OTPService otpService = new OTPServiceImpl(
+                otpRepository,
+                ticketRepository,
+                selectorNotificacion.disponibles()
+        );
+
         TicketService ticketService = new TicketServiceImpl(
                 ticketRepository,
                 usuarioRepository,
                 selectorPrioridad,
                 selectorAsignacion,
                 selectorNotificacion,
-                asignacionService
+                asignacionService,
+                otpService
         );
 
         AuthService authService = new AuthServiceImpl(
@@ -99,7 +108,8 @@ public class AppContextListener implements ServletContextListener {
         contexto.setAttribute(USUARIO_REPOSITORY, usuarioRepository);
         contexto.setAttribute(TICKET_REPOSITORY, ticketRepository);
         contexto.setAttribute(NOTIFICACION_APP, notificacionApp);
-        contexto.setAttribute("reporteService", reporteService);
+        contexto.setAttribute(REPORTE_SERVICE, reporteService);
+        contexto.setAttribute(OTP_SERVICE, otpService);
 
         System.out.println("=============================================");
         System.out.println("🚀 MESA DE AYUDA CIMM - INICIADA");

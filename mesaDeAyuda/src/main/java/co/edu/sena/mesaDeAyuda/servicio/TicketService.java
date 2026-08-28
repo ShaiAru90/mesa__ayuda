@@ -39,4 +39,8 @@ public interface TicketService {
     List<TicketDTO> buscarPorEstado(String estado, Usuario usuario);
 
     List<TicketDTO> buscarPorPrioridad(String prioridad, Usuario usuario);
+
+    TicketDTO cerrarConOTP(Long ticketId, String codigoOTP, Usuario usuario);
+
+    void reenviarOTP(Long ticketId, Usuario usuario);
 }
