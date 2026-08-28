@@ -4,6 +4,7 @@ co\edu\sena\mesaDeAyuda\modelo\estado\EstadoResuelto.class
 co\edu\sena\mesaDeAyuda\web\NotificacionServlet.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoCerrado.class
 co\edu\sena\mesaDeAyuda\servicio\prioridad\PrioridadPorCategoria.class
+co\edu\sena\mesaDeAyuda\dto\TicketPorEstadoDTO.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoEnProceso.class
 co\edu\sena\mesaDeAyuda\servicio\TicketServiceImpl.class
 co\edu\sena\mesaDeAyuda\servicio\validador\TicketValidator.class
@@ -14,6 +15,7 @@ co\edu\sena\mesaDeAyuda\web\LoginServlet.class
 co\edu\sena\mesaDeAyuda\web\TicketCreateServlet.class
 co\edu\sena\mesaDeAyuda\dto\CategoriaDTO.class
 co\edu\sena\mesaDeAyuda\dto\ComentarioDTO.class
+co\edu\sena\mesaDeAyuda\dto\EstadisticasDTO.class
 co\edu\sena\mesaDeAyuda\servicio\AsignacionService.class
 co\edu\sena\mesaDeAyuda\dto\TicketDTO.class
 co\edu\sena\mesaDeAyuda\web\AppContextListener.class
@@ -44,12 +46,14 @@ co\edu\sena\mesaDeAyuda\modelo\estado\EstadoAsignado.class
 co\edu\sena\mesaDeAyuda\dto\PrioridadDTO.class
 co\edu\sena\mesaDeAyuda\mapper\UsuarioMapper.class
 co\edu\sena\mesaDeAyuda\servicio\AuthServiceImpl.class
+co\edu\sena\mesaDeAyuda\servicio\ReporteService.class
 co\edu\sena\mesaDeAyuda\servicio\asignacion\AsignacionPorCarga.class
 co\edu\sena\mesaDeAyuda\servicio\notificacion\NotificacionApp.class
 co\edu\sena\mesaDeAyuda\servicio\excepcion\AccesoDenegadoException.class
 co\edu\sena\mesaDeAyuda\dto\UsuarioDTO.class
 co\edu\sena\mesaDeAyuda\repositorio\CategoriaRepository.class
 co\edu\sena\mesaDeAyuda\repositorio\TicketRepositoryEnMemoria.class
+co\edu\sena\mesaDeAyuda\dto\TicketPorAgenteDTO.class
 co\edu\sena\mesaDeAyuda\servicio\AuthService.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoNuevo.class
 co\edu\sena\mesaDeAyuda\mapper\ComentarioMapper.class
@@ -60,10 +64,12 @@ co\edu\sena\mesaDeAyuda\servicio\notificacion\SelectorNotificacion.class
 co\edu\sena\mesaDeAyuda\modelo\estado\EstadoTicket.class
 co\edu\sena\mesaDeAyuda\servicio\notificacion\NotificacionCorreo.class
 co\edu\sena\mesaDeAyuda\servicio\asignacion\SelectorAsignacion.class
+co\edu\sena\mesaDeAyuda\servicio\ReporteServiceImpl.class
 co\edu\sena\mesaDeAyuda\web\LogoutServlet.class
 co\edu\sena\mesaDeAyuda\servicio\notificacion\NotificacionCorreoReal.class
 co\edu\sena\mesaDeAyuda\web\TicketDetailServlet.class
 co\edu\sena\mesaDeAyuda\modelo\TicketBuilder.class
+co\edu\sena\mesaDeAyuda\web\ReporteServlet.class
 co\edu\sena\mesaDeAyuda\servicio\asignacion\AsignacionStrategy.class
 co\edu\sena\mesaDeAyuda\web\TicketActionServlet.class
 co\edu\sena\mesaDeAyuda\web\TicketServlet.class

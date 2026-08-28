@@ -205,6 +205,19 @@
 
             </c:if>
 
+            <c:if test="${usuario.esAdmin()}">
+                <a href="${pageContext.request.contextPath}/reportes" class="nav-link">
+                    <span class="nav-icon">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 20V10"/>
+                        <path d="M12 20V4"/>
+                        <path d="M6 20v-6"/>
+                        </svg>
+                    </span>
+                    Reportes
+                </a>
+            </c:if>
+
 
             <a
                 href="${pageContext.request.contextPath}/crear-ticket"

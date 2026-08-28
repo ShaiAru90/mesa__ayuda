@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/ServletListener.java to edit this template
- */
 package co.edu.sena.mesaDeAyuda.web;
 
 import co.edu.sena.mesaDeAyuda.repositorio.*;
@@ -29,6 +25,7 @@ public class AppContextListener implements ServletContextListener {
     public static final String USUARIO_REPOSITORY = "usuarioRepository";
     public static final String TICKET_REPOSITORY = "ticketRepository";
     public static final String NOTIFICACION_APP = "notificacionApp";
+    public static final String REPORTE_SERVICE = "reporteService";
 
     @Override
     public void contextInitialized(ServletContextEvent evento) {
@@ -39,27 +36,17 @@ public class AppContextListener implements ServletContextListener {
         CategoriaRepository categoriaRepository = new CategoriaRepositoryEnMemoria();
         NotificacionApp notificacionApp = new NotificacionApp();
 
+        ReporteService reporteService = new ReporteServiceImpl(ticketRepository, usuarioRepository);
+
         NotificacionCorreoReal notificacionCorreoReal = null;
         try {
-            // 🔹 INTENTAR CON VARIABLES DE ENTORNO (RECOMENDADO)
-            String correoEmisor = System.getenv("mesiasgoat777@gmail.com");
-            String passwordEmisor = System.getenv("qousnbnvolyairrq");
+            // 🔹 PON AQUÍ TUS CREDENCIALES REALES
+            String correoEmisor = "mesiasgoat777@gmail.com";
+            String passwordEmisor = "mqcfacrlnwsnwjnu"; // ← CONTRASEÑA DE APLICACIÓN DE GMAIL
 
-           
-            if (correoEmisor == null || correoEmisor.isEmpty() || passwordEmisor == null || passwordEmisor.isEmpty()) {
-                
-                correoEmisor = "tu_correo@gmail.com";
-                passwordEmisor = "tu_contraseña_app";
-                System.out.println("⚠️ [CorreoReal] Usando credenciales directas (solo pruebas)");
-            }
+            notificacionCorreoReal = new NotificacionCorreoReal(correoEmisor, passwordEmisor);
+            System.out.println("✅ [CorreoReal] Configurado con: " + correoEmisor);
 
-            if (correoEmisor != null && !correoEmisor.isEmpty()) {
-                notificacionCorreoReal = new NotificacionCorreoReal(correoEmisor, passwordEmisor);
-                System.out.println("✅ [CorreoReal] Configurado con: " + correoEmisor);
-            } else {
-                System.out.println("⚠️ [CorreoReal] No se encontraron credenciales");
-                notificacionCorreoReal = new NotificacionCorreoReal("test@test.com", "password");
-            }
         } catch (Exception e) {
             System.err.println("❌ [CorreoReal] Error al configurar: " + e.getMessage());
             notificacionCorreoReal = new NotificacionCorreoReal("test@test.com", "password");
@@ -112,6 +99,7 @@ public class AppContextListener implements ServletContextListener {
         contexto.setAttribute(USUARIO_REPOSITORY, usuarioRepository);
         contexto.setAttribute(TICKET_REPOSITORY, ticketRepository);
         contexto.setAttribute(NOTIFICACION_APP, notificacionApp);
+        contexto.setAttribute("reporteService", reporteService);
 
         System.out.println("=============================================");
         System.out.println("🚀 MESA DE AYUDA CIMM - INICIADA");

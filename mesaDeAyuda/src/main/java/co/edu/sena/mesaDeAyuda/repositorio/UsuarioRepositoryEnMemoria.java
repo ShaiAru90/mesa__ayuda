@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package co.edu.sena.mesaDeAyuda.repositorio;
 
 import co.edu.sena.mesaDeAyuda.modelo.Usuario;
@@ -83,7 +79,7 @@ public class UsuarioRepositoryEnMemoria implements UsuarioRepository {
         guardar(new Usuario("Laura Martínez", "laura@cimm.edu.co", "12345", Usuario.Rol.SOLICITANTE));
         
       
-        guardar(new Usuario("Carlos López", "carlos@cimm.edu.co", "12345", Usuario.Rol.AGENTE));
+        guardar(new Usuario("Carlos López", "halfonsokyar03@gmail.com", "12345", Usuario.Rol.AGENTE));
         guardar(new Usuario("Ana Martínez", "ana@cimm.edu.co", "12345", Usuario.Rol.AGENTE));
         guardar(new Usuario("Luis Sánchez", "luis@cimm.edu.co", "12345", Usuario.Rol.AGENTE));
         guardar(new Usuario("Elena Díaz", "elena@cimm.edu.co", "12345", Usuario.Rol.AGENTE));
