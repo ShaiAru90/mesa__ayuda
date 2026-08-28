@@ -33,7 +33,10 @@ public class AppContextListener implements ServletContextListener {
         ServletContext contexto = evento.getServletContext();
 
         UsuarioRepository usuarioRepository = new UsuarioRepositoryEnMemoria();
-        TicketRepository ticketRepository = new TicketRepositoryEnMemoria();
+        //TicketRepository ticketRepository = new TicketRepositoryEnMemoria();
+        TicketRepository ticketRepository = new TicketRepositoryJdbc();
+        System.out.println("✅ [AppContextListener] Usando TicketRepositoryJdbc");
+
         CategoriaRepository categoriaRepository = new CategoriaRepositoryEnMemoria();
         NotificacionApp notificacionApp = new NotificacionApp();
 
